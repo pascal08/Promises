@@ -1,30 +1,30 @@
 /*
- * Promise chaining to async/await
+ * Rewrite a `Promise` chain with `.then()` to `async` and `await`
  */
 
 // This pure Promise chain...
 
-let helloPromise = function() {
+let createHelloPromise = function() {
     return new Promise((resolve, reject) => {
         resolve("Hello")
     });
 };
 
-let worldPromise = function(hello) {
+let createHelloWorldPromise = function() {
     return new Promise((resolve, reject) => {
-        resolve(hello + " World")
+        resolve("Hello World")
     });
 };
 
-helloPromise()
-    .then(hello => worldPromise(hello))
+createHelloPromise()
+    .then(hello => createHelloWorldPromise(hello))
     .then(helloWorld => console.log(helloWorld));
 
 // can be written like this using async/await:
 
 async function helloWorld() {
-    let hello = await helloPromise();
-    let helloWorld = await worldPromise(hello);
+    let hello = await createHelloPromise();
+    let helloWorld = await createHelloWorldPromise();
 
     console.log(helloWorld);
 }

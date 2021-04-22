@@ -1,4 +1,4 @@
-let randomlyFailingPromise = function() {
+let createRandomlyFailingPromise = function() {
     return new Promise((resolve, reject) => {
         if (Math.random() < 0.5) {
             resolve("SUCCESS!");
@@ -7,22 +7,6 @@ let randomlyFailingPromise = function() {
         }
     });
 };
-
-// This:
-
-randomlyFailingPromise()
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
-
-// Equals this:
-
-randomlyFailingPromise()
-    .then(
-        (response) => console.log(response),
-        (response) => console.log(response)
-    );
-
-// Except that:
 
 let slowSucceedingPromise = () => {
     return new Promise(((resolve, reject) => {
@@ -39,7 +23,30 @@ let fastFailingPromise = () => {
     }))
 }
 
-// this behaves different...
+/*
+ * Catching a `Promise` with `.catch()`
+ */
+
+createRandomlyFailingPromise()
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
+
+/*
+ * "Catching" a `Promise` with `.then(onFulfilled, onRejected)`
+ */
+
+createRandomlyFailingPromise()
+    .then(
+        (response) => console.log(response),
+        (response) => console.log(response)
+    );
+
+/*
+ * Beware that handling rejected Promises with `.then(onFulfilled, onRejected)`
+ * is functionally different from `.catch()`
+ */
+
+// Compare this...
 
 Promise
     .race([
@@ -51,7 +58,7 @@ Promise
         (response) => console.log(response)
     );
 
-// than this:
+// ...to this:
 
 Promise
     .race([
@@ -60,8 +67,11 @@ Promise
     ])
     .catch(() => console.log('CATCHED!'));
 
-// because JS puts the fast failing promise back in the queue when using .then().
-// When using .catch() JS always passes the first failing promise to the catch clause
+// In the first case the fast failing Promise is put back in the queue
+// and the process continues settling the slow succeeding Promise that
+// is now first in the queue. In the latter case the `.catch()` definition
+// terminates further execution of the queue after the fast failing
+// Promise rejected.
 
 
 

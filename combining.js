@@ -1,4 +1,4 @@
-let promise = function(fail = false, timeout = 0) {
+let createPromise = function(fail = false, timeout = 0) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if (fail) {
@@ -11,16 +11,16 @@ let promise = function(fail = false, timeout = 0) {
 };
 
 let fastSucceedingPromise = function(timeout) {
-    return promise(false, 0);
+    return createPromise(false, 0);
 };
 let slowSucceedingPromise = function(timeout) {
-    return promise(false, 1000);
+    return createPromise(false, 1000);
 };
 let fastFailingPromise = function(timeout) {
-    return promise(true, 0);
+    return createPromise(true, 0);
 };
 let slowFailingPromise = function(timeout) {
-    return promise(true, 1000);
+    return createPromise(true, 1000);
 };
 
 /*

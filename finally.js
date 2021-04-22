@@ -1,4 +1,4 @@
-let randomlyFailingPromise = function() {
+let createRandomlyFailingPromise = function() {
     return new Promise((resolve, reject) => {
         if (Math.random() < 0.5) {
             resolve("SUCCESS!");
@@ -8,7 +8,7 @@ let randomlyFailingPromise = function() {
     });
 };
 
-randomlyFailingPromise()
+createRandomlyFailingPromise()
     .then((response) => console.log(response))
     .catch((response) => console.log(response))
     .finally(() => console.log("FINALLY!"));
